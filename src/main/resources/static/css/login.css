@@ -72,7 +72,7 @@ input[type='password'] {
   display: none;
 }
 
-#loginbox {
+#loginform {
   border: 1px solid black;
   width: 20vw;
   height: 23vh;
