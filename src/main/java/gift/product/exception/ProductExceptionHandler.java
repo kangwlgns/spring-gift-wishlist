@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 // product package 예외 핸들러.
 @ControllerAdvice(basePackages = "gift.product")
 public class ProductExceptionHandler {
-    private static final String ERROR_PAGE = "html/error-product";
+    private final String ERROR_PAGE = "html/error-product";
 
     // IllegalArgument 핸들러 함수
     @ExceptionHandler(IllegalArgumentException.class)
