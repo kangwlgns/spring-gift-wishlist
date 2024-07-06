@@ -1,8 +1,11 @@
-package gift.user.entity;
+package gift.permissions.entity;
 
+import gift.permissions.model.TokenComponent;
 import gift.user.dto.TokenDto;
-import gift.user.utility.TokenUtility;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 // User DB와 mapping될 엔터티
@@ -21,11 +24,6 @@ public class UserEntity {
 
     public String getPassword() {
         return password;
-    }
-
-    // 정보를 토대로 토큰을 반환. 유일하게 토큰을 생성하는 곳
-    public TokenDto getToken() {
-        return new TokenDto(TokenUtility.getToken(email, password));
     }
 
     // 입력으로 들어온 비밀번호를 검증하는 로직

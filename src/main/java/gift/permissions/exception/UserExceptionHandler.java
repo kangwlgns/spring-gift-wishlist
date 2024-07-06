@@ -1,4 +1,4 @@
-package gift.user.exception;
+package gift.permissions.exception;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
