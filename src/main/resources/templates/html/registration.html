@@ -9,18 +9,13 @@
   <header>
     <span class="title y-middle x-start">Registration Page</span>
     <div id="buttons" class="x-end y-middle">
-      <form action="/users/login-page" method="get">
+      <form action="/users/login" method="get">
         <button type="submit" class="normal-buttons">뒤로 가기</button>
       </form>
     </div>
   </header>
   <body>
-    <form
-      id="loginbox"
-      class="xy-middle"
-      action="/users/registration"
-      method="post"
-    >
+    <form id="loginform" class="xy-middle">
       <table id="logintable">
         <tr>
           <td>
@@ -45,4 +40,50 @@
       </button>
     </form>
   </body>
+  <script th:inline="javascript">
+    document
+      .getElementById('loginform')
+      .addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+
+        fetch('/api/auth/registration', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: email, password: password }),
+        })
+          .then((response) => {
+            if (response.status == 204) {
+              return null;
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.errorMsg) {
+              alert(data.errorMsg);
+            }
+          })
+          .catch((error) => {
+            alert('회원가입을 완료했습니다.');
+            loadMainPage();
+          });
+      });
+
+    function loadMainPage() {
+      fetch('/users/login', {
+        method: 'get',
+      })
+        .then((response) => response.text())
+        .then((html) => {
+          document.open();
+          document.write(html);
+          document.close();
+        })
+        .catch((error) => console.error('Error:', error));
+    }
+  </script>
 </html>

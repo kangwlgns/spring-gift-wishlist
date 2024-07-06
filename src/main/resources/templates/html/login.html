@@ -15,7 +15,7 @@
     </div>
   </header>
   <body>
-    <form id="loginbox" class="xy-middle" action="/users/login" method="post">
+    <form id="loginform" class="xy-middle" action="/users/login" method="post">
       <table id="logintable">
         <tr>
           <td>
@@ -36,8 +36,51 @@
       </table>
       <br />
       <button type="submit" class="normal-buttons y-end x-middle">
-        토큰 발급
+        로그인
       </button>
     </form>
+    <script th:inline="javascript">
+      document
+        .getElementById('loginform')
+        .addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          var email = document.getElementById('email').value;
+          var password = document.getElementById('password').value;
+
+          fetch('/api/auth/login', {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email: email, password: password }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.token) {
+                loadMainPage(data.token);
+              } else if (data.message) {
+                alert(data.message);
+              }
+            })
+            .catch((error) => console.error('Error:', error));
+        });
+
+      function loadMainPage(token) {
+        fetch('/users/main', {
+          method: 'get',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => response.text())
+          .then((html) => {
+            document.open();
+            document.write(html);
+            document.close();
+          })
+          .catch((error) => console.error('Error:', error));
+      }
+    </script>
   </body>
 </html>
