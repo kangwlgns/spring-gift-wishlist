@@ -2,7 +2,6 @@ package gift.permissions.repository;
 
 import gift.permissions.dto.UserDto;
 import gift.permissions.entity.UserEntity;
-import gift.permissions.model.TokenComponent;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;

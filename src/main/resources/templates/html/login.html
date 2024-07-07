@@ -59,8 +59,8 @@
             .then((data) => {
               if (data.token) {
                 loadMainPage(data.token);
-              } else if (data.message) {
-                alert(data.message);
+              } else if (data.errorMsg) {
+                alert(data.errorMsg);
               }
             })
             .catch((error) => console.error('Error:', error));

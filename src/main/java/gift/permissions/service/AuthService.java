@@ -1,6 +1,6 @@
 package gift.permissions.service;
 
-import gift.permissions.model.TokenComponent;
+import gift.permissions.component.TokenComponent;
 import gift.user.dto.TokenDto;
 import gift.permissions.dto.UserDto;
 import gift.permissions.entity.UserEntity;
