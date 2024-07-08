@@ -55,7 +55,8 @@ public class ProductService {
 
         // servicee가 entity를 받기보다는 dto를 받아야 한다는 것을 알았지만, 일단 후에 리팩토링하겠습니다.
         return productEntityList.stream().map(productEntity -> new ProductUserResponseDto(
-            productEntity.getName(), productEntity.getPrice(), productEntity.getImage()
+            productEntity.getId(), productEntity.getName(), productEntity.getPrice(),
+            productEntity.getImage()
         )).collect(Collectors.toList());
     }
 
