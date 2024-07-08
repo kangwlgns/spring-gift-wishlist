@@ -42,18 +42,51 @@ public class TokenComponent {
 
     // secretKey를 기반으로 토큰 디코딩하는 함수
     public void validateToken(String token) {
+        // 여기서 분해하면 validateToken을 호출할 때마다 분해하지 않아도 된다.
+        String tokenOnly = getOnlyToken(token);
+
         try {
             // deprecated라고 해서 parserBuilder()를 사용하려고 하니 찾을 수가 없었습니다.
             // gradle에서 주입해줘야 하는 것 같은데, 수정하면 안 될 것 같아서 일단 parser()를 사용했습니다.
             Jws<Claims> claims = Jwts.parser()
                 .setSigningKey(secretKey)
                 .build()
-                .parseClaimsJws(token);
+                .parseClaimsJws(tokenOnly);
             claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             // 서명이 잘못됐거나, 토큰이 잘못됐거나, 유효기간이 지났거나 등등의 이유로 다양한 예외가 발생할 수 있으므로 Exception으로 잡은 후에 401을 반환하겠습니다.
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "다시 로그인 필요");
         }
+    }
+
+    // token으로부터 email을 다시 얻는 메서드
+    public String getEmail(String token) {
+        // 여기서 분해하면 getEmail을 호출할 때마다 분해하지 않아도 된다.
+        String tokenOnly = getOnlyToken(token);
+
+        try {
+            Jws<Claims> claims = Jwts.parser()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(tokenOnly);
+
+            return claims.getBody().getSubject();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 접근");
+        }
+    }
+
+    // 방식 + 토큰의 문자열에서 토큰만 추출하는 메서드
+    private String getOnlyToken(String token) {
+        String[] tokenElements = token.split(" ");
+
+        // 양식이 뭔가 잘못된 경우 (방식 + 토큰이면 length == 2)
+        if (tokenElements.length != 2) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 접근");
+        }
+
+        String tokenOnly = tokenElements[1];
+        return tokenOnly;
     }
 
     // minute을 넣으면 밀리초로 반환하는 메서드
