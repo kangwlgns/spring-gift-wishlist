@@ -1,4 +1,4 @@
-package gift.permissions.interceptor;
+package gift.permissions.component;
 
 import gift.permissions.component.TokenComponent;
 import jakarta.servlet.http.HttpServletRequest;
