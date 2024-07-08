@@ -9,6 +9,15 @@ create table products (
      primary key (id)
 );
 
+create table products (
+      email varchar(255),
+      name varchar(255),
+      price int,
+      image varchar(255),
+      quantity int,
+      primary key (email)
+);
+
 create table users (
       email varchar(255),
       password varchar(255),
