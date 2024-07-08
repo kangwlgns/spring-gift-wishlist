@@ -1,6 +1,7 @@
 package gift.product.service;
 
 import gift.product.dto.ProductDto;
+import gift.product.dto.ProductUserResponseDto;
 import gift.product.entity.ProductEntity;
 import gift.product.repository.ProductDao;
 import java.util.List;
@@ -46,6 +47,16 @@ public class ProductService {
         return productEntityList.stream().map(productEntity -> new ProductDto(productEntity.getId(),
             productEntity.getName(), productEntity.getPrice(), productEntity.getImage(),
             productEntity.getMd())).collect(Collectors.toList());
+    }
+
+    // 사용자에게 보여줄 제품 정보를 반환하는 함수
+    public List<ProductUserResponseDto> selectProductsForUser() {
+        List<ProductEntity> productEntityList = productDao.selectProducts();
+
+        // servicee가 entity를 받기보다는 dto를 받아야 한다는 것을 알았지만, 일단 후에 리팩토링하겠습니다.
+        return productEntityList.stream().map(productEntity -> new ProductUserResponseDto(
+            productEntity.getName(), productEntity.getPrice(), productEntity.getImage()
+        )).collect(Collectors.toList());
     }
 
     // dao를 호출해서 특정 로우를 파라메터로 전달된 DTO로 교체하는 함수
