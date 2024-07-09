@@ -1,20 +1,27 @@
-package gift.permissions.interceptor;
+package gift.permissions.configurer;
 
-import gift.permissions.utility.UserUrlUtility;
+import gift.permissions.component.LoginInterceptor;
+import gift.permissions.component.UserAllProductsResolver;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 // WebMvcConfigurer를 구현하는 클래스.
 @Configuration
+@SpringBootConfiguration
 public class LoginConfigurer implements WebMvcConfigurer {
 
     private final LoginInterceptor loginInterceptor;
+    private final UserAllProductsResolver userAllProductsResolver;
 
     @Autowired
-    public LoginConfigurer(LoginInterceptor loginInterceptor) {
+    public LoginConfigurer(LoginInterceptor loginInterceptor, UserAllProductsResolver userAllProductsResolver) {
         this.loginInterceptor = loginInterceptor;
+        this.userAllProductsResolver = userAllProductsResolver;
     }
 
     // 인터셉터를 추가하는 메서드를 재정의하여 loginInterceptor를 등록하도록 함.
@@ -25,7 +32,15 @@ public class LoginConfigurer implements WebMvcConfigurer {
             .addInterceptor(loginInterceptor)
             // 아직은 하나 뿐이지만 순번을 정했습니다.
             .order(1)
-            // 가능한 경로
-            .addPathPatterns(UserUrlUtility.URL_LIST);
+            // 가능한 경로 (api와 view를 반환하는 경로 모두 추가)
+            .addPathPatterns("/user/**")
+            .addPathPatterns("/api/products/user")
+            .addPathPatterns("/api/wishlist/**");
+    }
+
+    // argument resolver를 추가하는 메서드 재정의
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(userAllProductsResolver);
     }
 }
