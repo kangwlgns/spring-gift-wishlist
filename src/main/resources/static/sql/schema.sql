@@ -9,13 +9,14 @@ create table products (
      primary key (id)
 );
 
-create table products (
+create table wish_products (
       email varchar(255),
+      id bigint,
       name varchar(255),
       price int,
       image varchar(255),
       quantity int,
-      primary key (email)
+      primary key (email, id)
 );
 
 create table users (
