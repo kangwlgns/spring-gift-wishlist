@@ -42,7 +42,6 @@ public class AuthExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public ErrorResponseDto handler(ResponseStatusException responseStatusException) {
         String message = responseStatusException.getMessage();
-
         return new ErrorResponseDto(message);
     }
 }
